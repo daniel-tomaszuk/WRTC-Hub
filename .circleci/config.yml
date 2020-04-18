@@ -1,0 +1,76 @@
+version: 2.1
+
+executors:
+  python:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/python:3.8
+
+jobs:
+  checkout_code:
+    executor: python
+    steps:
+      - checkout
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - .
+
+  install_requirements:
+    executor: python
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "app/requirements/requirements.txt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - run:
+          name: install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            make update-deps
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-{{ checksum "app/requirements/requirements.txt" }}
+
+  run_tests:
+    executor: python
+    docker:
+      - image: circleci/python:3.8
+        environment:
+          SECRET_KEY: test
+          DEBUG: True
+    working_directory: ~/repo
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "app/requirements/requirements.txt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - run:
+          name: run tests
+          command: |
+            . venv/bin/activate
+            pytest -v app/tests
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - .
+
+workflows:
+  version: 2.1
+  build-and-push-image:
+    jobs:
+      - checkout_code
+      - install_requirements:
+          requires:
+            - checkout_code
+      - run_tests:
+          requires:
+            - install_requirements
