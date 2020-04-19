@@ -75,7 +75,7 @@ jobs:
       - azure-acr/build-and-push-image:
           login-server-name: $ACR_REGISTRY_LOGIN
           registry-name: $ACR_REGISTRY_NAME
-          repo: ${CIRCLE_PROJECT_REPONAME}
+          repo: $ACR_REPOSITORY_NAME
           tag: ${CIRCLE_PROJECT_REPONAME}-${CIRCLE_BUILD_NUM}
 
 workflows:
