@@ -6,9 +6,14 @@ ENV APPSOURCEDIR "./app"
 WORKDIR ${WORKDIR}
 COPY ${APPSOURCEDIR} .
 
+RUN echo "deb http://security.debian.org/ stretch/updates main contrib non-free" >> /etc/apt/sources.list
+RUN apt-get update \
+&& apt-get install -y --no-install-recommends openssh-server \
+&& echo "root:Docker!" | chpasswd
+
 RUN pip install -r ./requirements/dev.txt
 RUN pip install -r ./requirements/requirements.txt
 RUN chmod 755 ./entrypoint.sh
 
-EXPOSE 8000
+EXPOSE 8000 2222
 ENTRYPOINT ["./entrypoint.sh"]
