@@ -66,7 +66,7 @@ jobs:
           paths:
             - .
 
-  upload-to-acr:
+  upload-to-acr-latest:
     executor: azure-acr/default
     working_directory: ~/repo
     steps:
@@ -77,6 +77,18 @@ jobs:
           registry-name: $ACR_REGISTRY_NAME
           repo: $ACR_REPOSITORY_NAME
           tag: latest
+
+  upload-to-acr-with-tag:
+    executor: azure-acr/default
+    working_directory: ~/repo
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - azure-acr/build-and-push-image:
+          login-server-name: $ACR_REGISTRY_LOGIN
+          registry-name: $ACR_REGISTRY_NAME
+          repo: $ACR_REPOSITORY_NAME
+          tag: ${CIRCLE_PROJECT_REPONAME}-${CIRCLE_BUILD_NUM}
 
 workflows:
   version: 2.1
@@ -89,7 +101,14 @@ workflows:
       - run_tests:
           requires:
             - install_requirements
-      - upload-to-acr:
+      - upload-to-acr-latest:
+          requires:
+            - run_tests
+          filters:
+            branches:
+              only:
+                - develop
+      - upload-to-acr-with-tag:
           requires:
             - run_tests
           filters:
