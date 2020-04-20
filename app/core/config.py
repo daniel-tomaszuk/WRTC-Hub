@@ -12,11 +12,10 @@ STATIC_ROOT = BASE_DIR + "/static"
 config = Config(".env")
 
 PROJECT_NAME = config("webrtc-hub", default="webrtc-hub")
-
-SECRET_KEY: Secret = config("SECRET_KEY", cast=Secret)
+SECRET_KEY: Secret = config("SECRET_KEY", cast=Secret, default="test")
 DEBUG = config("DEBUG", cast=bool, default=False)
 
-ALLOWED_HOSTS: List[str] = config("ALLOWED_HOSTS", cast=CommaSeparatedStrings, default="")
+ALLOWED_HOSTS: List[str] = config("ALLOWED_HOSTS", cast=CommaSeparatedStrings, default="*")
 
 # Azure Tracer
 # connection string taken from Azure App Insights
