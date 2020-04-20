@@ -11,4 +11,4 @@ RUN pip install -r ./requirements/requirements.txt
 RUN chmod 755 ./entrypoint.sh
 
 EXPOSE 8000
-ENTRYPOINT ["./app/entrypoint.sh"]
+ENTRYPOINT ["./entrypoint.sh"]
