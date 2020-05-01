@@ -89,17 +89,12 @@ workflows:
       - run_tests:
           requires:
             - install_requirements
-      - upload-to-acr-latest:
-          requires:
-            - run_tests
-          filters:
-            branches:
-              only:
-                - develop
-      - upload-to-acr-with-tag:
-          requires:
-            - run_tests
-          filters:
-            branches:
-              only:
-                - develop
+
+      # no CD for now - it generates costs, leave tests only
+#      - upload-to-acr-latest:
+#          requires:
+#            - run_tests
+#          filters:
+#            branches:
+#              only:
+#                - develop
