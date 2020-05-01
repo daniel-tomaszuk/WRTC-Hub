@@ -29,11 +29,11 @@ $(document).ready(function(){
   // sendFileButton.addEventListener('click', () => createConnection());
 
   $(sendFileButton).click(function() {
-    let tmp_promise = createConnection();
+    const tmp_promise = createConnection();
   });
 
   $(fileInput).on('change', function() {
-    let tmp_promise = handleFileInputChange();
+    const tmp_promise = handleFileInputChange();
   });
 
   abortButton.click(function() {
@@ -68,7 +68,7 @@ $(document).ready(function(){
 
     localConnection.addEventListener('icecandidate', async event => {
       console.log('Local ICE candidate: ', event.candidate);
-      await remoteConnection.addIceCandidate(event.candidate);
+      const tmp_promise = await remoteConnection.addIceCandidate(event.candidate);
     });
 
     remoteConnection = new RTCPeerConnection();
@@ -76,17 +76,16 @@ $(document).ready(function(){
 
     remoteConnection.addEventListener('icecandidate', async event => {
       console.log('Remote ICE candidate: ', event.candidate);
-      await localConnection.addIceCandidate(event.candidate);
+      const tmp_promise = await localConnection.addIceCandidate(event.candidate);
     });
     remoteConnection.addEventListener('datachannel', receiveChannelCallback);
 
     try {
       const offer = await localConnection.createOffer();
-      await gotLocalDescription(offer);
+      const tmp_promise = await gotLocalDescription(offer);
     } catch (e) {
       console.log('Failed to create session description: ', e);
     }
-
     fileInput.disabled = true;
   }
 
