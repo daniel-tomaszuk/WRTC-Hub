@@ -2,6 +2,9 @@
 # Created by https://www.gitignore.io/api/macos,python,pycharm,virtualenv
 # Edit at https://www.gitignore.io/?templates=macos,python,pycharm,virtualenv
 
+# Added by hand
+.idea
+
 ### macOS ###
 # General
 .DS_Store
