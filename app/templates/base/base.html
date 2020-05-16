@@ -14,7 +14,9 @@
     <!-- statics -->
     <link rel="stylesheet" href="{{ url_for('static', path='css/main.css') }}" />
     <script src="{{ url_for('static', path='js/jquery.js') }}"></script>
-    <script src="{{ url_for('static', path='js/main.js') }}"></script>
+    <script src="{{ url_for('static', path='js/base.js') }}"></script>
+    <script src="{{ url_for('static', path='js/send.js') }}"></script>
+    <script src="{{ url_for('static', path='js/receive.js') }}"></script>
 
 </head>
 
@@ -28,31 +30,9 @@
       <p>At the receiver, the file is reassembled using the Blob API and made available for download.</p>
       <p>Note: real-world applications require a file transfer protocol to send metadata about the file (such as the filename, type, size, last modification date, hash, ...).This information can be conveyed either via the signaling channel or in-band. The demo elides this by assuming knowledge of the file size at the receiver and closes both the datachannel and the peerconnection when the correct amount of bytes has been received.</p>
     </section>
-
-    <section>
-      <div >
-        <form id="fileInfo">
-          <input type="file" id="fileInput" name="files"/>
-        </form>
-        <button disabled id="sendFile">Send</button>
-        <button disabled id="abortButton">Abort</button>
-      </div>
-
-      <div class="progress">
-        <div class="label">Send progress: </div>
-        <progress id="sendProgress" max="0" value="0"></progress>
-      </div>
-
-      <div class="progress">
-        <div class="label">Receive progress: </div>
-        <progress id="receiveProgress" max="0" value="0"></progress>
-      </div>
-
-      <div id="bitrate"></div>
-      <a id="download"></a>
-      <span id="status"></span>
-    </section>
   </div>
+  {% block content %}
+  {% endblock %}
 
 </body>
 </html>

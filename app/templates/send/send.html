@@ -1,0 +1,25 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+
+<section>
+    <div>
+        <form id="fileInfo">
+            <input type="file" id="fileInput" name="files"/>
+        </form>
+        <button disabled id="sendFile">Send</button>
+        <button disabled id="abortButton">Abort</button>
+    </div>
+
+    <div class="progress">
+        <div class="label">Send progress:</div>
+        <progress id="sendProgress" max="0" value="0"></progress>
+    </div>
+    <br>
+    <div id="bitrate"></div>
+    <span id="status"></span>
+    <a id="download"></a>
+
+</section>
+
+{% endblock %}

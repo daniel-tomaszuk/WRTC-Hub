@@ -102,13 +102,19 @@ $(document).ready(function(){
       closeDataChannels();
       return;
     }
+
+    debugger;
     sendProgress.max = file.size;
-    receiveProgress.max = file.size;
+    // receiveProgress.max = file.size;
+    debugger;
+
+
     const chunkSize = 16384;
     fileReader = new FileReader();
     let offset = 0;
     fileReader.addEventListener('error', error => console.error('Error reading file:', error));
     fileReader.addEventListener('abort', event => console.log('File reading aborted:', event));
+
     fileReader.addEventListener('load', e => {
       console.log('FileRead.onload ', e);
       sendChannel.send(e.target.result);
@@ -125,6 +131,7 @@ $(document).ready(function(){
     };
     readSlice(0);
   }
+
 
   function closeDataChannels() {
     console.log('Closing data channels');
