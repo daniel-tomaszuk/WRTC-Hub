@@ -5,8 +5,8 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 
-from app.api.api_v1.routes import api_router
 from app.core import config
+from app.core.routes import core_router
 
 
 def get_application() -> FastAPI:
@@ -20,7 +20,7 @@ def get_application() -> FastAPI:
         allow_headers=["*"],
     )
 
-    application.include_router(api_router)
+    application.include_router(core_router)
     if Path(config.STATIC_ROOT).exists():
         application.mount(config.STATIC_URL, StaticFiles(directory=config.STATIC_ROOT), name="static")
 
@@ -30,5 +30,5 @@ def get_application() -> FastAPI:
 app = get_application()
 
 if __name__ == "__main__":
-    # entrypoint for starting the app as python script - `python main.py` will start the worker
-    uvicorn.run(app, host="0.0.0.0", port=8000)  # test
+    # entry point for starting the app as python script - `python main.py` will start the worker
+    uvicorn.run(app, host="0.0.0.0", port=8000)
