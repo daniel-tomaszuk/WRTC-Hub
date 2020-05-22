@@ -1,6 +1,23 @@
 {% extends "base/base.html" %}
 
+{% block additional_scripts %}
+    <script src="{{ url_for('static', path='js/receive.js') }}"></script>
+{% endblock %}
+
 {% block content %}
+<section>
+    <p>Select available resource:</p>
+    <ul>
+        {% if offer_keys %}
+            {% for offer_key in offer_keys %}
+                <li><span onclick="downloadResource('{{ offer_key }}')"><u>{{ offer_key }}</u></span></li>
+            {% endfor %}
+        {% else %}
+            <li><b>No available resources.</b></li>
+        {% endif %}
+    </ul>
+    <br>
+</section>
 <section>
     <div class="progress">
         <div class="label">Receive progress:</div>

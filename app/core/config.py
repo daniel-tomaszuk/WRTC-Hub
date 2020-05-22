@@ -17,6 +17,15 @@ DEBUG = config("DEBUG", cast=bool, default=False)
 
 ALLOWED_HOSTS: List[str] = config("ALLOWED_HOSTS", cast=CommaSeparatedStrings, default="*")
 
+BASE_HOST_NAME = config("BASE_HOST_NAME", default="localhost:8000")
+
 # Azure Tracer
 # connection string taken from Azure App Insights
 APPLICATIONINSIGHTS_CONNECTION_STRING = config("APPLICATIONINSIGHTS_CONNECTION_STRING", default="")
+
+# WebRTC
+# SDP Strings
+ANSWER_KEY = "answer"
+OFFER_KEY = "offer"
+SDP_KEY = "sdp"
+SDP_TYPE_KEY = "type"

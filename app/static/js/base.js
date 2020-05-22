@@ -7,9 +7,9 @@ function closeDataChannels() {
         receiveChannel.close();
         console.log(`Closed data channel with label: ${receiveChannel.label}`);
     }
-    localConnection.close();
+    sendConnection.close();
     remoteConnection.close();
-    localConnection = null;
+    sendConnection = null;
     remoteConnection = null;
     console.log('Closed peer connections');
 
@@ -19,17 +19,15 @@ function closeDataChannels() {
     sendFileButton.disabled = false;
 }
 
-async function setDescriptions(localConnection, remoteConnection) {
+async function setDescriptions(sendConnection) {
     try {
-        const offer = await localConnection.createOffer();
-        await localConnection.setLocalDescription(offer);
-        await remoteConnection.setRemoteDescription(offer);
-        debugger;
-        const answer = await remoteConnection.createAnswer();
-        await localConnection.setRemoteDescription(answer);
-        await remoteConnection.setLocalDescription(answer);
-        debugger;
-        // TODO: check what is going on - when data is being send
+        const offer = await sendConnection.createOffer();
+        await sendConnection.setLocalDescription(offer).then(function(){
+            getBESocket(rtcSetOfferUrl, sendConnection).then(function(socket){
+                const jsonOffer = JSON.stringify(offer);
+                socket.send(jsonOffer);
+            });
+        })
     } catch (e) {
         errorHandler(e);
     }
@@ -61,10 +59,4 @@ async function displayStats() {
             }
         }
     }
-}
-
-function errorHandler(error) {
-    console.log('An error occurred!\n')
-    console.log(error);
-
 }

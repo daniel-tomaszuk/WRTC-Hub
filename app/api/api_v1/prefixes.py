@@ -1,0 +1,3 @@
+BASE_V1_PREFIX = ""
+API_V1_PREFIX = "/api/v1"
+WEB_SOCKETS_V1_PREFIX = "/ws"
