@@ -2,9 +2,8 @@ from fastapi import APIRouter
 
 router = APIRouter()
 
-SDP_URL = "/sdp"
+GET_SESSION_DESCRIPTION_OFFER_BASE = "/session-description/offer"
+GET_SESSION_DESCRIPTION_OFFER = GET_SESSION_DESCRIPTION_OFFER_BASE + "/{offer_key}"
 
-
-@router.post(SDP_URL)
-async def sdp(request_payload: dict) -> dict:
-    return {}
+SET_SESSION_DESCRIPTION_ANSWER_BASE = "/session-description/answer"
+SET_SESSION_DESCRIPTION_ANSWER = SET_SESSION_DESCRIPTION_ANSWER_BASE + "/{offer_key}"
