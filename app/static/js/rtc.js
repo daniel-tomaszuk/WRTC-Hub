@@ -4,13 +4,17 @@ const dataChannelBinaryType = "arraybuffer";
 
 async function createPeerConnection() {
     const peerConnection = new RTCPeerConnection();
-    peerConnection.addEventListener('icecandidate', async event => {
-        logMessage('Local ICE candidate: ', event.candidate);
-        // TODO: set ICE Candidates through BE!
-        debugger;
-        // const tmp_promise = await remoteConnection.addIceCandidate(event.candidate);
+    return createSignallingSocket(peerConnection, webSocketUrl).then(function (socket) {
+        peerConnection.addEventListener('icecandidate', async event => {
+            // triggered by setLocalDescription
+            logMessage('Local ICE candidate: ', event.candidate);
+            await setICEDescription(socket, event.candidate)
+        });
+        return {
+            "socket": socket,
+            "peerConnection": peerConnection
+        }
     });
-    return peerConnection
 }
 
 
@@ -27,11 +31,53 @@ async function createPeerConnectionReceiveDataChannel(peerConnection) {
     peerConnection.addEventListener('datachannel', receiveChannelCallback);
 }
 
-async function setICEDescriptions(peerConnection) {
-
+async function setSDPAnswer(socket, peerConnection, sdpOffer) {
+    await peerConnection.setRemoteDescription(sdpOffer).then(function () {
+        peerConnection.createAnswer().then(function (sdpAnswer) {
+            sendSocketMessage(socket, sdpAnswer, setAction, SDPTypeKey, answerKey, uuidResourceKey).then(function(){
+                peerConnection.setLocalDescription(sdpAnswer);
+            });
+        });
+    });
 }
 
+function getSDPOffer(socket, resourceKey) {
+    sendSocketMessage(socket, '', getAction, SDPTypeKey, offerKey, resourceKey);
+}
 
+async function setICEDescription(socket, iceCandidate) {
+    // remote part must set this candidate with `addIceCandidate` method
+    let iceSubType = null;
+    const iceData = JSON.stringify(iceCandidate);
+    if (iceData.includes(TCPKey)){
+        iceSubType = TCPKey;
+    } else if (iceData.includes(UDPKey)){
+        iceSubType = UDPKey;
+    }
+    await sendSocketMessage(socket, iceData, setAction, ICETypeKey, iceSubType, uuidResourceKey)
+}
+
+async function addIceCandidates(peerConnection, candidatesData) {
+    // remote part must set this candidate with `addIceCandidate` method
+    $.each(candidatesData, function (index, candidate) {
+        if (candidate && candidate !== "null") {
+            const candidateDict = JSON.parse(candidate);
+            peerConnection.addIceCandidate(candidateDict);
+        }
+    })
+}
+
+function unpackCacheKey(cacheKey) {
+    const splitChar = ":";
+    const resourceKey = cacheKey.split(splitChar)[0];
+    const keyType = cacheKey.split(splitChar)[1];
+    const keySubType = cacheKey.split(splitChar)[2];
+    return {
+        "resourceKey": resourceKey,
+        "type": keyType,
+        "subType": keySubType
+    }
+}
 
 function errorHandler(error) {
     console.log('An error occurred!\n')
@@ -107,7 +153,6 @@ function receiveChannelCallback(event) {
     receiveChannel.onmessage = onReceiveMessageCallback;
     receiveChannel.onopen = onReceiveChannelStateChange;
     receiveChannel.onclose = onReceiveChannelStateChange;
-    debugger;
     const receivedSize = 0;
     const bitrateMax = 0;
     const downloadAnchor = $("#download")[0];

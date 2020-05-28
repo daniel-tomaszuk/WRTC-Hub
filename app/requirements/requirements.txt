@@ -40,6 +40,10 @@ aiortc==0.9.28 \
     --hash=sha256:d7de192a5b60f2ab94a5d39d4087e885e1b9bbb608f8c634cae95d9dcb75f509 \
     --hash=sha256:f0e7d04aa825937a5ad68800ed5a467fd218ca779e740bdcda9902ee65ac8172 \
     # via -r ./app/requirements/requirements.in
+attrs==19.3.0 \
+    --hash=sha256:08a96c641c3a74e44eb59afb61a24f2cb9f4d7188748e76ba4bb5edfa3cb7d1c \
+    --hash=sha256:f7b7ce16570fe9965acd6d30101a28f62fb4a7f9e926b3bbc9b61f8b04247e72 \
+    # via pytest
 av==8.0.1 \
     --hash=sha256:0df16332bcdc64afb9a40ca2b1ae3857ed8ce9e42c59b083166b978556064cbb \
     --hash=sha256:27939405a78dbbb6b06e452fe505e12f30c32c6967ef164abbefa9525384dad3 \
@@ -222,6 +226,10 @@ markupsafe==1.1.1 \
     --hash=sha256:e249096428b3ae81b08327a63a485ad0878de3fb939049038579ac0ef61e17e7 \
     --hash=sha256:e8313f01ba26fbbe36c7be1966a7b7424942f670f38e666995b88d012765b9be \
     # via jinja2
+more-itertools==8.3.0 \
+    --hash=sha256:558bb897a2232f5e4f8e2399089e35aecb746e1f9191b6584a151647e89267be \
+    --hash=sha256:7818f596b1e87be009031c7653d01acc46ed422e6656b394b0f765ce66ed4982 \
+    # via pytest
 netifaces==0.10.9 \
     --hash=sha256:078986caf4d6a602a4257d3686afe4544ea74362b8928e9f4389b5cd262bc215 \
     --hash=sha256:0c4304c6d5b33fbd9b20fdc369f3a2fef1a8bbacfb6fd05b9708db01333e9e7b \
@@ -246,6 +254,18 @@ netifaces==0.10.9 \
     --hash=sha256:f8885cc48c8c7ad51f36c175e462840f163cb4687eeb6c6d7dfaf7197308e36b \
     --hash=sha256:f911b7f0083d445c8d24cfa5b42ad4996e33250400492080f5018a28c026db2b \
     # via aioice
+packaging==20.4 \
+    --hash=sha256:4357f74f47b9c12db93624a82154e9b120fa8293699949152b22065d556079f8 \
+    --hash=sha256:998416ba6962ae7fbd6596850b80e17859a5753ba17c32284f67bfff33784181 \
+    # via pytest
+pluggy==0.13.1 \
+    --hash=sha256:15b2acde666561e1298d71b523007ed7364de07029219b604cf808bfa1c765b0 \
+    --hash=sha256:966c145cd83c96502c3c3868f50408687b38434af77734af1e9ca461a4081d2d \
+    # via pytest
+py==1.8.1 \
+    --hash=sha256:5e27081401262157467ad6e7f851b7aa402c5852dbcb3dae06768434de5752aa \
+    --hash=sha256:c20fdd83a5dbc0af9efd622bee9a5564e278f6380fffcacc43ba6f43db2813b0 \
+    # via pytest
 pycparser==2.20 \
     --hash=sha256:2d475327684562c3a96cc71adf7dc8c4f0565175cf86b6d7a404ff4c771f15f0 \
     --hash=sha256:7582ad22678f0fcd81102833f60ef8d0e57288b6b5fb00323d101be910e35705 \
@@ -295,6 +315,17 @@ pylibsrtp==0.6.6 \
     --hash=sha256:e128a6e0344a7ec1fbbbf54b2287ae3944bd98740e12c2db0fccebdaedf6d847 \
     --hash=sha256:f06b4fa7e6cedb1050ace08e3e5d378b32924e63c79b70877cafc42190facfcb \
     # via aiortc
+pyparsing==2.4.7 \
+    --hash=sha256:c203ec8783bf771a155b207279b9bccb8dea02d8f0c9e5f8ead507bc3246ecc1 \
+    --hash=sha256:ef9d7589ef3c200abe66653d3f1ab1033c3c419ae9b9bdb1240a85b024efc88b \
+    # via packaging
+pytest-asyncio==0.12.0 \
+    --hash=sha256:475bd2f3dc0bc11d2463656b3cbaafdbec5a47b47508ea0b329ee693040eebd2 \
+    # via -r ./app/requirements/requirements.in
+pytest==5.4.2 \
+    --hash=sha256:95c710d0a72d91c13fae35dce195633c929c3792f54125919847fdcdf7caa0d3 \
+    --hash=sha256:eb2b5e935f6a019317e455b6da83dd8650ac9ffd2ee73a7b657a30873d67a698 \
+    # via pytest-asyncio
 requests==2.23.0 \
     --hash=sha256:43999036bfa82904b6af1d99e4882b560e5e2c68e5c4b0aa03b655f3d7d73fee \
     --hash=sha256:b3f43d496c6daba4493e7c431722aeb7dbc6288f52a6e04e7b6023b0247817e6 \
@@ -302,7 +333,7 @@ requests==2.23.0 \
 six==1.14.0 \
     --hash=sha256:236bdbdce46e6e6a3d61a337c0f8b763ca1e8717c03b369e87a7ec7ce1319c0a \
     --hash=sha256:8f3cd2e254d8f793e7f3d6d9df77b92252b52637291d0f0da013c76ea2724b6c \
-    # via cryptography
+    # via cryptography, packaging
 starlette==0.13.2 \
     --hash=sha256:6169ee78ded501095d1dda7b141a1dc9f9934d37ad23196e180150ace2c6449b \
     --hash=sha256:a9bb130fa7aa736eda8a814b6ceb85ccf7a209ed53843d0d61e246b380afa10f \
@@ -335,6 +366,10 @@ uvloop==0.14.0 \
     --hash=sha256:e7514d7a48c063226b7d06617cbb12a14278d4323a065a8d46a7962686ce2e95 \
     --hash=sha256:f07909cd9fc08c52d294b1570bba92186181ca01fe3dc9ffba68955273dd7362 \
     # via uvicorn
+wcwidth==0.1.9 \
+    --hash=sha256:cafe2186b3c009a04067022ce1dcd79cb38d8d65ee4f4791b8888d6599d1bbe1 \
+    --hash=sha256:ee73862862a156bf77ff92b09034fc4825dd3af9cf81bc5b360668d425f3c5f1 \
+    # via pytest
 websockets==8.1 \
     --hash=sha256:0e4fb4de42701340bd2353bb2eee45314651caa6ccee80dbd5f5d5978888fed5 \
     --hash=sha256:1d3f1bf059d04a4e0eb4985a887d49195e15ebabc42364f4eb564b1d065793f5 \

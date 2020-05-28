@@ -1,8 +1,12 @@
+import logging
 import os
 from typing import List
 
 from starlette.config import Config
 from starlette.datastructures import CommaSeparatedStrings, Secret
+
+logger = logging.getLogger("root logger")
+logger.setLevel(logging.DEBUG)
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__)).rsplit(os.sep, 1)[0]
 # statics config
@@ -29,3 +33,4 @@ ANSWER_KEY = "answer"
 OFFER_KEY = "offer"
 SDP_KEY = "sdp"
 SDP_TYPE_KEY = "type"
+ICE_CANDIDATE_KEY = "ice"
