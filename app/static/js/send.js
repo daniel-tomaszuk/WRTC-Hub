@@ -1,7 +1,7 @@
 'use strict';
 
 let fileReader;
-
+let globalSdpOffer = null;
 
 $(document).ready(function () {
     const fileInput = $("#fileInput")[0];
@@ -26,16 +26,15 @@ $(document).ready(function () {
 
     // create new connection on send button
     $(sendFileButton).click(function () {
-        const peerConnection = createPeerConnection().then(function (peerConnection) {
-            const peerConnectionDataChannel = createPeerConnectionSendDataChannel(peerConnection).then(function () {
+        // brace yourself and enter callback hell!
+        createPeerConnection().then(function (returnObject) {
+            const peerConnection = returnObject["peerConnection"];
+            const socket = returnObject["socket"];
+            createPeerConnectionSendDataChannel(peerConnection).then(function () {
                 // set SDP Offer in BE, continue signaling via web sockets
-                const sdpOffer = peerConnection.createOffer().then(function (sdpOffer) {
-                    peerConnection.setLocalDescription(sdpOffer).then(function () {
-                        const jsonMessage = JSON.stringify(sdpOffer);
-                        createSignallingSocket(peerConnection, webSocketUrl).then(function (socket) {
-                            sendSocketMessage(socket, jsonMessage)
-                        })
-                    })
+                peerConnection.createOffer().then(function (sdpOffer) {
+                    globalSdpOffer = sdpOffer;
+                    sendSocketMessage(socket, sdpOffer, setAction, SDPTypeKey, offerKey);
                 });
             });
         });
