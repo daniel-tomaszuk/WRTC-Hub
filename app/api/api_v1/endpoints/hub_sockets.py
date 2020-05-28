@@ -51,8 +51,8 @@ async def ws_rtc_sdp(websocket: WebSocket):
                 await SocketHandler.notify_sockets(message=dict(action=RTCActionEnum.set.value, uuid_key=cache_key))
 
             elif validated_data.action == RTCActionEnum.get:
-                data: Union[dict, str] = CacheHandler.get(cache_key)
-                data = data if data != "null" else {}
+                data: Union[dict, str, None] = CacheHandler.get(cache_key)
+                data = data if data and data != "null" else {}
                 data.setdefault("uuid_key", str(validated_data.uuid_key))
                 if (
                     validated_data.type == RTCTypeEnum.sdp

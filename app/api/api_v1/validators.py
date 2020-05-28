@@ -17,7 +17,7 @@ class ValidatedSocketPayload(BaseSerializer):
     action: RTCActionEnum
     type: RTCTypeEnum
     sub_type: Union[RTCSubActionEnum, None] = Field(None)
-    data: Union[str, dict, None]
+    data: Union[str, dict]
     uuid_key: Union[UUID, None] = Field(None)
 
 
