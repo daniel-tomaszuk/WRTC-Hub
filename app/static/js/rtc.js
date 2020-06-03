@@ -21,8 +21,12 @@ async function createPeerConnection() {
 async function createPeerConnectionSendDataChannel(peerConnection) {
     const dataChannel = peerConnection.createDataChannel(dataChannelLabel);
     dataChannel.binaryType = dataChannelBinaryType;
-    dataChannel.addEventListener('open', checkStateAndSendData(dataChannel.readyState));
-    dataChannel.addEventListener('close', checkStateAndSendData(dataChannel.readyState));
+
+    dataChannel.onopen = checkStateAndSendData;
+    dataChannel.onclose = checkStateAndSendData;
+    dataChannel.onmessage = function(event) {
+        logMessage(event);
+    };
     dataChannel.addEventListener('error', error => errorHandler(error));
     return dataChannel
 }
@@ -34,7 +38,7 @@ async function createPeerConnectionReceiveDataChannel(peerConnection) {
 async function setSDPAnswer(socket, peerConnection, sdpOffer) {
     await peerConnection.setRemoteDescription(sdpOffer).then(function () {
         peerConnection.createAnswer().then(function (sdpAnswer) {
-            sendSocketMessage(socket, sdpAnswer, setAction, SDPTypeKey, answerKey, uuidResourceKey).then(function(){
+            sendSocketMessage(socket, sdpAnswer, setAction, SDPTypeKey, answerKey, uuidResourceKey).then(function () {
                 peerConnection.setLocalDescription(sdpAnswer);
             });
         });
@@ -49,9 +53,9 @@ async function setICEDescription(socket, iceCandidate) {
     // remote part must set this candidate with `addIceCandidate` method
     let iceSubType = null;
     const iceData = JSON.stringify(iceCandidate);
-    if (iceData.includes(TCPKey)){
+    if (iceData.includes(TCPKey)) {
         iceSubType = TCPKey;
-    } else if (iceData.includes(UDPKey)){
+    } else if (iceData.includes(UDPKey)) {
         iceSubType = UDPKey;
     }
     await sendSocketMessage(socket, iceData, setAction, ICETypeKey, iceSubType, uuidResourceKey)
@@ -86,52 +90,45 @@ function errorHandler(error) {
 }
 
 
-function logMessage(message){
+function logMessage(message) {
     console.log(`Logger ${moment().format()}:\n`);
     console.log(message);
 }
 
-
-
-// TODO: refactor code below
 // --------------------------------------------
-function checkStateAndSendData(sendChannelState) {
-    logMessage(`Send channel state is: ${sendChannelState}`);
-    if (sendChannelState === 'open') {
-        debugger;
-        sendData();
+function checkStateAndSendData() {
+    logMessage(`Send channel state is: ${this.readyState}`);
+    if (this.readyState === 'open') {
+        sendData(this);
     }
 }
 
-function sendData() {
-    const bitrateDiv = $("#bitrate")[0];
+function sendData(sendChannel) {
+    const fileInput = $("#fileInput")[0];
+    const sendProgress = $('#sendProgress')[0];
     const file = fileInput.files[0];
     logMessage(`File is ${[file.name, file.size, file.type, file.lastModified].join(' ')}`);
 
     // Handle 0 size files.
-    statusMessage.textContent = '';
-    downloadAnchor.textContent = '';
     if (file.size === 0) {
-        bitrateDiv.innerHTML = '';
-        statusMessage.textContent = 'File is empty, please select a non-empty file';
+        window.alert('File size is 0. Choose other file.')
         closeDataChannels();
         return;
     }
-
-    debugger;
     sendProgress.max = file.size;
+    tmpFileSize = file.size;
     // receiveProgress.max = file.size;
-    debugger;
-    const chunkSize = 16384;
+    // const chunkSize = 16384;
+    const chunkSize = 99999999999999;  // force one chunk for now
     fileReader = new FileReader();
     let offset = 0;
     fileReader.addEventListener('error', error => console.error('Error reading file:', error));
     fileReader.addEventListener('abort', event => console.log('File reading aborted:', event));
 
-    fileReader.addEventListener('load', e => {
-        logMessage('FileRead.onload ', e);
-        sendChannel.send(e.target.result);
-        offset += e.target.result.byteLength;
+    fileReader.addEventListener('load', event => {
+        logMessage('FileRead.onload ', event);
+        sendChannel.send(event.target.result);
+        offset += event.target.result.byteLength;
         sendProgress.value = offset;
         if (offset < file.size) {
             readSlice(offset);
@@ -150,7 +147,7 @@ function sendData() {
 function receiveChannelCallback(event) {
     const receiveChannel = event.channel;
     receiveChannel.binaryType = dataChannelBinaryType;
-    receiveChannel.onmessage = onReceiveMessageCallback;
+    receiveChannel.onmessage = onReceiveMessageCallback;  // when data is being received by data channel
     receiveChannel.onopen = onReceiveChannelStateChange;
     receiveChannel.onclose = onReceiveChannelStateChange;
     const receivedSize = 0;
@@ -166,46 +163,31 @@ function receiveChannelCallback(event) {
 
 
 function onReceiveMessageCallback(event) {
+    const receiveProgress = $("#receiveProgress")[0];
+    let receiveBuffer = [];
+    let receivedSize = 0;
     console.log(`Received Message ${event.data.byteLength}`);
     receiveBuffer.push(event.data);
     receivedSize += event.data.byteLength;
-
     receiveProgress.value = receivedSize;
-
-    // we are assuming that our signaling protocol told
-    // about the expected file size (and name, hash, etc).
-    const file = fileInput.files[0];
-    if (receivedSize === file.size) {
+    // TODO: assume signaling protocol told about the expected file size (and name, hash, etc).
+    debugger;
+    if (receivedSize > 0) {
+        debugger;
+        const downloadAnchor = $("#download")[0];
         const received = new Blob(receiveBuffer);
         receiveBuffer = [];
-
         downloadAnchor.href = URL.createObjectURL(received);
-        downloadAnchor.download = file.name;
+        downloadAnchor.download = 'strange_file';
         downloadAnchor.textContent =
-            `Click to download '${file.name}' (${file.size} bytes)`;
+            `Click to download something ;) - (${receivedSize} bytes)`;
         downloadAnchor.style.display = 'block';
-
-        const bitrate = Math.round(receivedSize * 8 /
-            ((new Date()).getTime() - timestampStart));
-        bitrateDiv.innerHTML =
-            `<strong>Average Bitrate:</strong> ${bitrate} kbits/sec (max: ${bitrateMax} kbits/sec)`;
-
-        if (statsInterval) {
-            clearInterval(statsInterval);
-            statsInterval = null;
-        }
-
+        debugger;
+        // TODO: display some stats
         closeDataChannels();
     }
 }
 
-async function onReceiveChannelStateChange() {
-    const readyState = receiveChannel.readyState;
-    console.log(`Receive channel state is: ${readyState}`);
-    if (readyState === 'open') {
-        timestampStart = (new Date()).getTime();
-        timestampPrev = timestampStart;
-        statsInterval = setInterval(displayStats, 500);
-        await displayStats();
-    }
+async function onReceiveChannelStateChange(event) {
+    logMessage(`Channel readyState: ${this.readyState}`)
 }

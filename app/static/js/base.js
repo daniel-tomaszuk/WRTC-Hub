@@ -19,20 +19,6 @@ function closeDataChannels() {
     sendFileButton.disabled = false;
 }
 
-async function setDescriptions(sendConnection) {
-    try {
-        const offer = await sendConnection.createOffer();
-        await sendConnection.setLocalDescription(offer).then(function(){
-            getBESocket(rtcSetOfferUrl, sendConnection).then(function(socket){
-                const jsonOffer = JSON.stringify(offer);
-                socket.send(jsonOffer);
-            });
-        })
-    } catch (e) {
-        errorHandler(e);
-    }
-}
-
 // display bitrate statistics.
 async function displayStats() {
     if (remoteConnection && remoteConnection.iceConnectionState === 'connected') {

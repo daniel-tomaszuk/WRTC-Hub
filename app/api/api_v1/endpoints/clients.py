@@ -29,5 +29,7 @@ async def send(request: Request):
 @router.get(RECEIVE_URL)
 async def receive(request: Request):
     base_ws_url = "ws://" + BASE_HOST_NAME + WEB_SOCKETS_V1_PREFIX + SOCKET_BASE_URL
-    context: dict = dict(request=request, ws_url=base_ws_url, sdp_key=SDP_KEY, offer_keys=CacheHandler.get_all_keys())
+    context: dict = dict(
+        request=request, ws_url=base_ws_url, sdp_key=SDP_KEY, offer_keys=CacheHandler.get_offer_keys(),
+    )
     return templates.TemplateResponse("receive/receive.html", context)
