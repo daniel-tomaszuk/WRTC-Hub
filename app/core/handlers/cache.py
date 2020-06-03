@@ -1,5 +1,7 @@
 from typing import Any
 
+from app.core.config import OFFER_KEY
+
 DUMMY_CACHE = {}
 
 
@@ -20,6 +22,10 @@ class CacheHandler(BaseHandlerCache):
     @staticmethod
     def get_all_keys():
         return [key for key in DUMMY_CACHE.keys()]
+
+    @staticmethod
+    def get_offer_keys():
+        return [key for key in DUMMY_CACHE.keys() if OFFER_KEY in key]
 
     def __str__(self):
         return "Cache Handler Class"
