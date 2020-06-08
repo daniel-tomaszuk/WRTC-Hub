@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   azure-acr: circleci/azure-acr@0.2.0
 
+
 executors:
   python:
     working_directory: ~/repo
@@ -47,6 +48,11 @@ jobs:
         environment:
           SECRET_KEY: test
           DEBUG: True
+      - image: redis:6-alpine
+        environment:
+          REDIS_HOST: 0.0.0.0
+          REDIS_PORT: 6379
+          REDIS_DB: 0
     working_directory: ~/repo
     steps:
       - attach_workspace:

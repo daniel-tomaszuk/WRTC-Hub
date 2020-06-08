@@ -1,31 +1,39 @@
-from typing import Any
+from dataclasses import dataclass
+from typing import List, Union
 
-from app.core.config import OFFER_KEY
+import redis
+import ujson
 
-DUMMY_CACHE = {}
+from app.core.config import OFFER_KEY, REDIS_DB, REDIS_HOST, REDIS_KEY_LIVE_TIME, REDIS_PORT
+
+redis = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
 
 
+@dataclass
 class BaseHandlerCache:
-    pass
+    expire: int = REDIS_KEY_LIVE_TIME
 
 
 class CacheHandler(BaseHandlerCache):
     @classmethod
-    def set(cls, key: str, value: Any) -> bool:
-        DUMMY_CACHE.setdefault(key, value)
-        return True
+    def set(cls, key: str, value: Union[dict, str]) -> bool:
+        return redis.set(key, ujson.dumps(value), ex=cls.expire)
 
     @classmethod
-    def get(cls, key: str):
-        return DUMMY_CACHE.get(key, None)
+    def get(cls, key: str) -> Union[dict, str, None]:
+        try:
+            return ujson.loads(redis.get(key))
+        except TypeError:
+            return
 
     @staticmethod
-    def get_all_keys():
-        return [key for key in DUMMY_CACHE.keys()]
+    def get_all_keys() -> List[str]:
+        all_keys = [key.decode("utf-8") for key in redis.keys()]
+        return all_keys
 
     @staticmethod
     def get_offer_keys():
-        return [key for key in DUMMY_CACHE.keys() if OFFER_KEY in key]
+        return [key.decode("utf-8") for key in redis.keys(pattern=f"*{OFFER_KEY}*")]
 
     def __str__(self):
         return "Cache Handler Class"
