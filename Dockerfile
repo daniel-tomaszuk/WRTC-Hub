@@ -8,6 +8,7 @@ COPY ${APPSOURCEDIR} .
 
 RUN echo "deb http://security.debian.org/ stretch/updates main contrib non-free" >> /etc/apt/sources.list
 RUN apt-get update \
+&& apt-get install -y --no-install-recommends build-essential \
 && apt-get install -y --no-install-recommends openssh-server \
 && echo "root:Docker!" | chpasswd
 
