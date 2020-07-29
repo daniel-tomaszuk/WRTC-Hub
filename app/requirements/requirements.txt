@@ -7,7 +7,7 @@
 aiofiles==0.5.0 \
     --hash=sha256:377fdf7815cc611870c59cbd07b68b180841d2a2b79812d8c218be02448c2acb \
     --hash=sha256:98e6bcfd1b50f97db4980e182ddd509b7cc35909e903a8fe50d8849e02d815af \
-    # via -r ./app/requirements/requirements.in
+    # via -r requirements.in
 aioice==0.6.18 \
     --hash=sha256:962192aa29c2bec1f1fdd86b58a431efe355394c86fad09beddc7094cd3d09ef \
     --hash=sha256:c6ab906e4c71b91d89daf0bb161ed1b3cf0e8e9803f47cb7fe2ff2c942a0e428 \
@@ -39,7 +39,7 @@ aiortc==0.9.28 \
     --hash=sha256:d535ace3f7eaa839b5dafe1c05592b2ef8c0fba7a07f2b4af7ff68f6e2e1a481 \
     --hash=sha256:d7de192a5b60f2ab94a5d39d4087e885e1b9bbb608f8c634cae95d9dcb75f509 \
     --hash=sha256:f0e7d04aa825937a5ad68800ed5a467fd218ca779e740bdcda9902ee65ac8172 \
-    # via -r ./app/requirements/requirements.in
+    # via -r requirements.in
 attrs==19.3.0 \
     --hash=sha256:08a96c641c3a74e44eb59afb61a24f2cb9f4d7188748e76ba4bb5edfa3cb7d1c \
     --hash=sha256:f7b7ce16570fe9965acd6d30101a28f62fb4a7f9e926b3bbc9b61f8b04247e72 \
@@ -160,11 +160,11 @@ cryptography==2.9.2 \
 fastapi==0.54.1 \
     --hash=sha256:1ee9a49f28d510b62b3b51a9452b274853bfc9c5d4b947ed054366e2d49f9efa \
     --hash=sha256:72f40f47e5235cb5cbbad1d4f97932ede6059290c07e12e9784028dcd1063d28 \
-    # via -r ./app/requirements/requirements.in
+    # via -r requirements.in
 gunicorn==20.0.4 \
     --hash=sha256:1904bb2b8a43658807108d59c3f3d56c2b6121a701161de0ddf9ad140073c626 \
     --hash=sha256:cd4a810dd51bf497552cf3f863b575dabd73d6ad6a91075b65936b151cbf4f9c \
-    # via -r ./app/requirements/requirements.in
+    # via -r requirements.in
 h11==0.9.0 \
     --hash=sha256:33d4bca7be0fa039f4e84d50ab00531047e53d6ee8ffbc83501ea602c169cae1 \
     --hash=sha256:4bc6d6a1238b7615b266ada57e0618568066f57dd6fa967d1290ec9309b2f2f1 \
@@ -190,7 +190,7 @@ idna==2.9 \
 jinja2==2.11.2 \
     --hash=sha256:89aab215427ef59c34ad58735269eb58b1a5808103067f7bb9d5836c651b3bb0 \
     --hash=sha256:f0a4641d3cf955324a89c04f3d94663aa4d638abe8f733ecd3582848e1c37035 \
-    # via -r ./app/requirements/requirements.in
+    # via -r requirements.in
 markupsafe==1.1.1 \
     --hash=sha256:00bc623926325b26bb9605ae9eae8a215691f33cae5df11ca5424f06f2d1f473 \
     --hash=sha256:09027a7803a62ca78792ad89403b1b7a73a01c8cb65909cd876f7fcebd79b161 \
@@ -321,7 +321,7 @@ pyparsing==2.4.7 \
     # via packaging
 pytest-asyncio==0.12.0 \
     --hash=sha256:475bd2f3dc0bc11d2463656b3cbaafdbec5a47b47508ea0b329ee693040eebd2 \
-    # via -r ./app/requirements/requirements.in
+    # via -r requirements.in
 pytest==5.4.2 \
     --hash=sha256:95c710d0a72d91c13fae35dce195633c929c3792f54125919847fdcdf7caa0d3 \
     --hash=sha256:eb2b5e935f6a019317e455b6da83dd8650ac9ffd2ee73a7b657a30873d67a698 \
@@ -329,11 +329,11 @@ pytest==5.4.2 \
 redis==3.5.3 \
     --hash=sha256:0e7e0cfca8660dea8b7d5cd8c4f6c5e29e11f31158c0b0ae91a397f00e5a05a2 \
     --hash=sha256:432b788c4530cfe16d8d943a09d40ca6c16149727e4afe8c2c9d5580c59d9f24 \
-    # via -r ./app/requirements/requirements.in
+    # via -r requirements.in
 requests==2.23.0 \
     --hash=sha256:43999036bfa82904b6af1d99e4882b560e5e2c68e5c4b0aa03b655f3d7d73fee \
     --hash=sha256:b3f43d496c6daba4493e7c431722aeb7dbc6288f52a6e04e7b6023b0247817e6 \
-    # via -r ./app/requirements/requirements.in
+    # via -r requirements.in
 six==1.14.0 \
     --hash=sha256:236bdbdce46e6e6a3d61a337c0f8b763ca1e8717c03b369e87a7ec7ce1319c0a \
     --hash=sha256:8f3cd2e254d8f793e7f3d6d9df77b92252b52637291d0f0da013c76ea2724b6c \
@@ -350,15 +350,15 @@ ujson==2.0.3 \
     --hash=sha256:7ae13733d9467d16ccac2f38212cdee841b49ae927085c533425be9076b0bc9d \
     --hash=sha256:bd2deffc983827510e5145fb66e4cc0f577480c62fe0b4882139f8f7d27ae9a3 \
     --hash=sha256:c8369ef49169804944e920c427e350182e33756422b69989c55608fc28bebf98 \
-    # via -r ./app/requirements/requirements.in
+    # via -r requirements.in
 urllib3==1.25.9 \
     --hash=sha256:3018294ebefce6572a474f0604c2021e33b3fd8006ecd11d62107a5d2a963527 \
     --hash=sha256:88206b0eb87e6d677d424843ac5209e3fb9d0190d0ee169599165ec25e9d9115 \
     # via requests
-uvicorn==0.11.3 \
-    --hash=sha256:0f58170165c4495f563d8224b2f415a0829af0412baa034d6f777904613087fd \
-    --hash=sha256:6fdaf8e53bf1b2ddf0fe9ed06079b5348d7d1d87b3365fe2549e6de0d49e631c \
-    # via -r ./app/requirements/requirements.in
+uvicorn==0.11.7 \
+    --hash=sha256:1d46a22cc55a52f5567e0c66f000ae56f26263e44cef59b7c885bf10f487ce6e \
+    --hash=sha256:b50f7f4c0c499c9b8d0280924cfbd24b90ba02456e3dc80934b9a786a291f09f \
+    # via -r requirements.in
 uvloop==0.14.0 \
     --hash=sha256:08b109f0213af392150e2fe6f81d33261bb5ce968a288eb698aad4f46eb711bd \
     --hash=sha256:123ac9c0c7dd71464f58f1b4ee0bbd81285d96cdda8bc3519281b8973e3a461e \
